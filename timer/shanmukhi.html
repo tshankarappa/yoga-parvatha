@@ -1,150 +1,19 @@
-
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>timer</title>
-
-    <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            height: 35vh;
-            width: 100%;
-        }
-
-        .main-content {
-            height: 65vh;
-            width: 100%;
-        }
-
-        button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 36px 36px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            background: url(/assets/images/icons/play.jpg);
-            background-repeat: no-repeat !important;
-            background-size: 70px 70px !important;
-        }
-
-        #stop {
-            background: url(/assets/images/icons/stop.png);
-        }
-
-        #pause {
-            background: url(/assets/images/icons/pause.png);
-        }
-
-        #resume {
-            background: url(/assets/images/icons/resume.png);
-            display: none;
-        }
-
-        #mute {
-            background: url(/assets/images/icons/unmute.png);
-        }
-
-        #next {
-            background: url(/assets/images/icons/next.png);
-        }
-
-        .btn-push {
-            position: relative;
-            top: 0px;
-            font-family: "Open Sans";
-            text-decoration: none;
-            font-size: 25px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            -webkit-box-shadow: 0px 5px 0px #c4c4c4;
-            -moz-box-shadow: 0px 5px 0px #c4c4c4;
-            -ms-box-shadow: 0px 5px 0px #c4c4c4;
-            -o-box-shadow: 0px 5px 0px #c4c4c4;
-            box-shadow: 0px 5px 0px #c4c4c4;
-            color: #222;
-            text-shadow: 1px 1px 1px #fff;
-            -webkit-transition: All 250ms ease;
-            -moz-transition: All 250ms ease;
-            -o-transition: All 250ms ease;
-            -ms-transition: All 250ms ease;
-            transition: All 250ms ease;
-        }
-
-        /*==========  Active State  ==========*/
-        .btn-push:active {
-            position: relative;
-            top: 5px;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -ms-box-shadow: none !important;
-            -o-box-shadow: none !important;
-            box-shadow: none !important;
-            -webkit-transition: All 250ms ease;
-            -moz-transition: All 250ms ease;
-            -o-transition: All 250ms ease;
-            -ms-transition: All 250ms ease;
-            transition: All 250ms ease;
-        }
-
-        .btn-push-active {
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -ms-box-shadow: none !important;
-            -o-box-shadow: none !important;
-            box-shadow: none !important;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #timer {
-            font-size: 10vw;
-            color: black;
-            text-align: center;
-        }
-
-        .startTimer #start {
-            display: none;
-        }
-
-        .stopTimer #pause,
-        .stopTimer #stop,
-        .stopTimer #resume {
-            display: none;
-        }
-
-        .pauseTimer #pause {
-            display: none;
-        }
-
-        .pauseTimer #resume {
-            display: inline-block;
-        }
-
-        p {
-            font-size: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shanmukhi Timer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="container stopTimer">
-
         <button id="start" class="btn-push" onclick="startTimer()"></button>
         <button id="pause" class="btn-push" onclick="pauseTimer(true)"></button>
         <button id="resume" class="btn-push" onclick="pauseTimer(event,false)"></button>
         <button id="stop" class="btn-push" onclick="stopTimer()"></button>
         <button id="next" class="btn-push" onclick="nextStep()"></button>
-        <button id="mute" onclick=mutebutton(event);></button>
+        <button id="mute" onclick="mutebutton(event)"></button>
     </div>
     <div class="main-content">
         <p id="timer">Shanmukhi</p>
@@ -160,10 +29,7 @@
             ['AUM Chanting', 110],
             ['Shanmukhi Mudra', 105],
             ['Meditate', 420]
-        ]
-
-
-
+        ];
 
         let i = 0;
         let currentTaskTime = taskArray[i][1];
@@ -188,9 +54,7 @@
 
             document.getElementById("timer").innerHTML = `${currentTaskTime} s <br>${taskArray[i][0]}`;
             if (currentTaskTime == 0) {
-                //  document.getElementById("timer").innerHTML = `${i + 1} step done`;
                 i++;
-
 
                 if (!mute) {
                     bell.play();
@@ -214,8 +78,6 @@
             return;
         }
 
-
-
         function mutebutton(event) {
             mute = !mute;
             event.target.style.background = mute ? "url(/assets/images/icons/mute.png)" : "url(/assets/images/icons/unmute.png)";
@@ -225,8 +87,6 @@
             currentTaskTime = 0;
         }
 
-
-
         function startTimer() {
             preloadAudio();
             document.querySelector(".container").classList.replace("stopTimer", "startTimer")
@@ -234,12 +94,12 @@
             currentTaskTime = taskArray[i][1];
             pause = false;
             timer = setInterval(timerfunction, 1000);
-            noSleep.enable(); // keep the screen on!
+            noSleep.enable();
         }
 
         function stopTimer() {
             clearInterval(timer);
-            noSleep.disable(); // let the screen turn off.
+            noSleep.disable();
             document.getElementById("timer").innerHTML = "completed";
             document.querySelector(".container").classList.value = "container stopTimer";
             return;
@@ -249,10 +109,6 @@
             pause = flag;
             document.querySelector(".container").classList.toggle("pauseTimer", flag);
         }
-
     </script>
-
-
 </body>
-
 </html>

@@ -1,0 +1,105 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 35vh;
+    width: 100%;
+}
+
+.main-content {
+    height: 65vh;
+    width: 100%;
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 36px 36px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background: url(/assets/images/icons/play.jpg);
+    background-repeat: no-repeat !important;
+    background-size: 70px 70px !important;
+}
+
+#stop {
+    background: url(/assets/images/icons/stop.png);
+}
+
+#pause {
+    background: url(/assets/images/icons/pause.png);
+}
+
+#resume {
+    background: url(/assets/images/icons/resume.png);
+    display: none;
+}
+
+#mute {
+    background: url(/assets/images/icons/unmute.png);
+}
+
+#next {
+    background: url(/assets/images/icons/next.png);
+}
+
+.btn-push {
+    position: relative;
+    top: 0px;
+    font-family: "Open Sans";
+    text-decoration: none;
+    font-size: 25px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 0px #c4c4c4;
+    color: #222;
+    text-shadow: 1px 1px 1px #fff;
+    transition: All 250ms ease;
+}
+
+.btn-push:active {
+    position: relative;
+    top: 5px;
+    box-shadow: none !important;
+    transition: All 250ms ease;
+}
+
+.btn-push-active {
+    box-shadow: none !important;
+}
+
+.hidden {
+    display: none;
+}
+
+#timer {
+    font-size: 10vw;
+    color: black;
+    text-align: center;
+}
+
+.startTimer #start {
+    display: none;
+}
+
+.stopTimer #pause,
+.stopTimer #stop,
+.stopTimer #resume {
+    display: none;
+}
+
+.pauseTimer #pause {
+    display: none;
+}
+
+.pauseTimer #resume {
+    display: inline-block;
+}
+
+p {
+    font-size: 20px;
+} 

@@ -1,8 +1,10 @@
-
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>timer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shambhavi Timer</title>
+    <link rel="stylesheet" href="styles.css">
 
     <style>
         .container {
@@ -135,16 +137,14 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container stopTimer">
-
         <button id="start" class="btn-push" onclick="startTimer()"></button>
         <button id="pause" class="btn-push" onclick="pauseTimer(true)"></button>
         <button id="resume" class="btn-push" onclick="pauseTimer(event,false)"></button>
         <button id="stop" class="btn-push" onclick="stopTimer()"></button>
         <button id="next" class="btn-push" onclick="nextStep()"></button>
-        <button id="mute" onclick=mutebutton(event);></button>
+        <button id="mute" onclick="mutebutton(event)"></button>
     </div>
     <div class="main-content">
         <p id="timer">Shambhavi</p>
@@ -156,22 +156,11 @@
         let mute = false;
         let taskArray = [
             ['Start', 5],
-            ['Prayer', 35],
-            ['Pathangaasana', 120],
-            ['Break', 5],
-            ['Shishupalasana-R', 120],
-            ['Break', 5],
-            ['Shishupalasana-L', 120],
-            ['Break', 5],
-            ['Nadi Vibhajan', 300],
-            ['Sukha Kriya', 360],
-            ['AUM Chanting', 360],
-            ['Vipareetha Shwasa', 180],
-            ['Bandas', 60],
-            ['Meditate', 360]
-        ]
-
-
+            ['Naadi Shuddhi', 240],
+            ['AUM Chanting', 110],
+            ['Shambhavi Kriya', 105],
+            ['Meditate', 420]
+        ];
 
         let i = 0;
         let currentTaskTime = taskArray[i][1];
@@ -196,9 +185,7 @@
 
             document.getElementById("timer").innerHTML = `${currentTaskTime} s <br>${taskArray[i][0]}`;
             if (currentTaskTime == 0) {
-                //  document.getElementById("timer").innerHTML = `${i + 1} step done`;
                 i++;
-
 
                 if (!mute) {
                     bell.play();
@@ -222,18 +209,14 @@
             return;
         }
 
-
-
         function mutebutton(event) {
             mute = !mute;
-            event.target.style.background = mute ? "url(mute.png)" : "url(unmute.png)";
+            event.target.style.background = mute ? "url(/assets/images/icons/mute.png)" : "url(/assets/images/icons/unmute.png)";
         }
 
         function nextStep() {
             currentTaskTime = 0;
         }
-
-
 
         function startTimer() {
             preloadAudio();
@@ -242,12 +225,12 @@
             currentTaskTime = taskArray[i][1];
             pause = false;
             timer = setInterval(timerfunction, 1000);
-            noSleep.enable(); // keep the screen on!
+            noSleep.enable();
         }
 
         function stopTimer() {
             clearInterval(timer);
-            noSleep.disable(); // let the screen turn off.
+            noSleep.disable();
             document.getElementById("timer").innerHTML = "completed";
             document.querySelector(".container").classList.value = "container stopTimer";
             return;
@@ -257,10 +240,6 @@
             pause = flag;
             document.querySelector(".container").classList.toggle("pauseTimer", flag);
         }
-
     </script>
-
-
 </body>
-
 </html>
