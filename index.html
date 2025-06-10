@@ -30,10 +30,6 @@
       max-width: 600px;
       padding: 0 15px;
     }
-    a {
-      color: #007acc;
-      text-decoration: none;
-    }
     .button-container {
       margin: 20px 0;
       display: flex;
@@ -43,7 +39,7 @@
       max-width: 300px;
       padding: 0 15px;
     }
-    .pdf-button, .timer-button {
+    .timer-button, .doc-button {
       background-color: #007acc;
       color: white;
       border: none;
@@ -57,59 +53,18 @@
       text-decoration: none;
       display: inline-block;
     }
-    .pdf-button:hover, .timer-button:hover {
+    .timer-button:hover, .doc-button:hover {
       background-color: #005999;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    .pdf-button:active, .timer-button:active {
+    .timer-button:active, .doc-button:active {
       transform: translateY(0);
     }
     .section-title {
       margin: 30px 0 15px;
       color: #333;
       font-size: 20px;
-    }
-    #pdf-popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-    }
-    #pdf-popup iframe {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 95%;
-      height: 95%;
-      border: none;
-      background-color: white;
-      border-radius: 8px;
-    }
-    .close-button {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
-      z-index: 1001;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      transition: background-color 0.3s;
-    }
-    .close-button:hover {
-      background-color: rgba(0, 0, 0, 0.8);
     }
     @media (min-width: 768px) {
       .button-container {
@@ -118,20 +73,16 @@
         justify-content: center;
         flex-wrap: wrap;
       }
-      .pdf-button, .timer-button {
+      .timer-button, .doc-button {
         width: auto;
         min-width: 200px;
-      }
-      #pdf-popup iframe {
-        width: 90%;
-        height: 90%;
       }
     }
   </style>
 </head>
 <body>
   <h1> 🧘 🧘🏻‍♀️ 🧘🏼‍♀️ 🧘‍♀️ Hello, Welcome Back!</h1>
-  <p>Isha Yoga Practices for personal Use</p>
+  <p> Yoga Practices for personal Use</p>
   
   <h2 class="section-title">Timers</h2>
   <div class="button-container">
@@ -139,43 +90,9 @@
     <a href="timer/shambhavi.html" class="timer-button">Shambhavi Timer</a>
   </div>
 
-  <h2 class="section-title">PDF Documents</h2>
+  <h2 class="section-title">Documents</h2>
   <div class="button-container">
-    <button class="pdf-button" onclick="openPdf('assets/pdf/surya-kriya-protected.pdf')">Surya Kriya</button>
-    <button class="pdf-button" onclick="openPdf('assets/pdf/surya-shakti-protected.pdf')">Surya Shakti</button>
+    <a href="documents.html" class="doc-button">View Practice Documents</a>
   </div>
-
-
-
-  <div id="pdf-popup">
-    <span class="close-button" onclick="closePdf()">&times;</span>
-    <iframe id="pdf-frame" src=""></iframe>
-  </div>
-
-
-  <script>
-    function openPdf(pdfPath) {
-      const popup = document.getElementById('pdf-popup');
-      const frame = document.getElementById('pdf-frame');
-      frame.src = pdfPath;
-      popup.style.display = 'block';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePdf() {
-      const popup = document.getElementById('pdf-popup');
-      const frame = document.getElementById('pdf-frame');
-      popup.style.display = 'none';
-      frame.src = '';
-      document.body.style.overflow = 'auto';
-    }
-
-    // Close popup when clicking outside the iframe
-    document.getElementById('pdf-popup').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closePdf();
-      }
-    });
-  </script>
 </body>
 </html>

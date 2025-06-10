@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="assets/images/favicon/meditation.png" />
+    <title>Yoga Documents</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f9f9f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #007acc;
+            margin: 20px 0;
+            font-size: clamp(24px, 5vw, 32px);
+        }
+        p {
+            margin: 10px 0;
+            font-size: clamp(14px, 3vw, 16px);
+            max-width: 600px;
+            padding: 0 15px;
+        }
+        .button-container {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+            padding: 0 15px;
+        }
+        .pdf-button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pdf-button:hover {
+            background-color: #005999;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .pdf-button:active {
+            transform: translateY(0);
+        }
+        .back-link {
+            color: #007acc;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        #pdf-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+        #pdf-popup iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            height: 95%;
+            border: none;
+            background-color: white;
+            border-radius: 8px;
+        }
+        .close-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        @media (min-width: 768px) {
+            .button-container {
+                flex-direction: row;
+                max-width: 600px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .pdf-button {
+                width: auto;
+                min-width: 200px;
+            }
+            #pdf-popup iframe {
+                width: 90%;
+                height: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Yoga Documents</h1>
+    <p>Access your practice documents here</p>
+    
+    <div class="button-container">
+        <button class="pdf-button" onclick="openPdf('assets/pdf/surya-kriya-protected.pdf')">Surya Kriya</button>
+        <button class="pdf-button" onclick="openPdf('assets/pdf/surya-shakti-protected.pdf')">Surya Shakti</button>
+        <button class="pdf-button" onclick="openPdf('assets/pdf/isha-kriya-protected.pdf')">Isha Kriya</button>
+    </div>
+
+    <div id="pdf-popup">
+        <span class="close-button" onclick="closePdf()">&times;</span>
+        <iframe id="pdf-frame" src=""></iframe>
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+
+    <script>
+        function openPdf(pdfPath) {
+            const popup = document.getElementById('pdf-popup');
+            const frame = document.getElementById('pdf-frame');
+            frame.src = pdfPath;
+            popup.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePdf() {
+            const popup = document.getElementById('pdf-popup');
+            const frame = document.getElementById('pdf-frame');
+            popup.style.display = 'none';
+            frame.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close popup when clicking outside the iframe
+        document.getElementById('pdf-popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePdf();
+            }
+        });
+    </script>
+</body>
+</html> 
