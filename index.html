@@ -42,7 +42,7 @@
       max-width: 300px;
       padding: 0 15px;
     }
-    .pdf-button {
+    .pdf-button, .timer-button {
       background-color: #007acc;
       color: white;
       border: none;
@@ -53,14 +53,21 @@
       transition: all 0.3s ease;
       width: 100%;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-decoration: none;
+      display: inline-block;
     }
-    .pdf-button:hover {
+    .pdf-button:hover, .timer-button:hover {
       background-color: #005999;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    .pdf-button:active {
+    .pdf-button:active, .timer-button:active {
       transform: translateY(0);
+    }
+    .section-title {
+      margin: 30px 0 15px;
+      color: #333;
+      font-size: 20px;
     }
     #pdf-popup {
       display: none;
@@ -108,8 +115,9 @@
         flex-direction: row;
         max-width: 600px;
         justify-content: center;
+        flex-wrap: wrap;
       }
-      .pdf-button {
+      .pdf-button, .timer-button {
         width: auto;
         min-width: 200px;
       }
@@ -121,21 +129,28 @@
   </style>
 </head>
 <body>
-  <h1>🚀 Hello, GitHub Pages!</h1>
-  <p>This is a simple static site hosted on GitHub Pages.</p>
+  <h1>🚀 Hello, Welcome Back!</h1>
+  <p>Isha Yoga Practices for personal Use</p>
   
+  <h2 class="section-title">Timers</h2>
+  <div class="button-container">
+    <a href="timer/shanmukhi.html" class="timer-button">Shanmukhi Timer</a>
+    <a href="timer/shambhavi.html" class="timer-button">Shambhavi Timer</a>
+  </div>
+
+  <h2 class="section-title">PDF Documents</h2>
   <div class="button-container">
     <button class="pdf-button" onclick="openPdf('assets/surya-kriya-protected.pdf')">Surya Kriya</button>
     <button class="pdf-button" onclick="openPdf('assets/surya-shakti-protected.pdf')">Surya Shakti</button>
   </div>
+
+
 
   <div id="pdf-popup">
     <span class="close-button" onclick="closePdf()">&times;</span>
     <iframe id="pdf-frame" src=""></iframe>
   </div>
 
-  <p>Edit <code>index.html</code> in your repo to change this page.</p>
-  <p><a href="https://github.com">Back to GitHub</a></p>
 
   <script>
     function openPdf(pdfPath) {
