@@ -20,12 +20,94 @@
       color: #007acc;
       text-decoration: none;
     }
+    .button-container {
+      margin: 30px 0;
+    }
+    .pdf-button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .pdf-button:hover {
+      background-color: #005999;
+    }
+    #pdf-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+    }
+    #pdf-popup iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      height: 90%;
+      border: none;
+      background-color: white;
+    }
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 1001;
+    }
   </style>
 </head>
 <body>
   <h1>🚀 Hello, GitHub Pages!</h1>
   <p>This is a simple static site hosted on GitHub Pages.</p>
+  
+  <div class="button-container">
+    <button class="pdf-button" onclick="openPdf('assets/surya-kriya.pdf')">Surya Kriya</button>
+    <button class="pdf-button" onclick="openPdf('assets/surya-shakti.pdf')">Surya Shakti</button>
+  </div>
+
+  <div id="pdf-popup">
+    <span class="close-button" onclick="closePdf()">&times;</span>
+    <iframe id="pdf-frame" src=""></iframe>
+  </div>
+
   <p>Edit <code>index.html</code> in your repo to change this page.</p>
   <p><a href="https://github.com">Back to GitHub</a></p>
+
+  <script>
+    function openPdf(pdfPath) {
+      const popup = document.getElementById('pdf-popup');
+      const frame = document.getElementById('pdf-frame');
+      frame.src = pdfPath;
+      popup.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePdf() {
+      const popup = document.getElementById('pdf-popup');
+      const frame = document.getElementById('pdf-frame');
+      popup.style.display = 'none';
+      frame.src = '';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close popup when clicking outside the iframe
+    document.getElementById('pdf-popup').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closePdf();
+      }
+    });
+  </script>
 </body>
 </html>
