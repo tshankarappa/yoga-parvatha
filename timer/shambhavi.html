@@ -2,245 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="assets/images/favicon/meditation.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shambhavi Timer</title>
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
-
-    <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            height: 35vh;
-            width: 100%;
-        }
-
-        .main-content {
-            height: 65vh;
-            width: 100%;
-        }
-
-        button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 36px 36px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            background: url(/assets/images/icons/play.jpg);
-            background-repeat: no-repeat !important;
-            background-size: 70px 70px !important;
-        }
-
-        #stop {
-            background: url(/assets/images/icons/stop.png);
-        }
-
-        #pause {
-            background: url(/assets/images/icons/pause.png);
-        }
-
-        #resume {
-            background: url(/assets/images/icons/resume.png);
-            display: none;
-        }
-
-        #mute {
-            background: url(/assets/images/icons/unmute.png);
-        }
-
-        #next {
-            background: url(/assets/images/icons/next.png);
-        }
-
-        .btn-push {
-            position: relative;
-            top: 0px;
-            font-family: "Open Sans";
-            text-decoration: none;
-            font-size: 25px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            -webkit-box-shadow: 0px 5px 0px #c4c4c4;
-            -moz-box-shadow: 0px 5px 0px #c4c4c4;
-            -ms-box-shadow: 0px 5px 0px #c4c4c4;
-            -o-box-shadow: 0px 5px 0px #c4c4c4;
-            box-shadow: 0px 5px 0px #c4c4c4;
-            color: #222;
-            text-shadow: 1px 1px 1px #fff;
-            -webkit-transition: All 250ms ease;
-            -moz-transition: All 250ms ease;
-            -o-transition: All 250ms ease;
-            -ms-transition: All 250ms ease;
-            transition: All 250ms ease;
-        }
-
-        /*==========  Active State  ==========*/
-        .btn-push:active {
-            position: relative;
-            top: 5px;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -ms-box-shadow: none !important;
-            -o-box-shadow: none !important;
-            box-shadow: none !important;
-            -webkit-transition: All 250ms ease;
-            -moz-transition: All 250ms ease;
-            -o-transition: All 250ms ease;
-            -ms-transition: All 250ms ease;
-            transition: All 250ms ease;
-        }
-
-        .btn-push-active {
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            -ms-box-shadow: none !important;
-            -o-box-shadow: none !important;
-            box-shadow: none !important;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #timer {
-            font-size: 10vw;
-            color: black;
-            text-align: center;
-        }
-
-        .startTimer #start {
-            display: none;
-        }
-
-        .stopTimer #pause,
-        .stopTimer #stop,
-        .stopTimer #resume {
-            display: none;
-        }
-
-        .pauseTimer #pause {
-            display: none;
-        }
-
-        .pauseTimer #resume {
-            display: inline-block;
-        }
-
-        p {
-            font-size: 20px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
+    <script src="timer.js"></script>
 </head>
 <body>
     <div class="container stopTimer">
-        <button id="start" class="btn-push" onclick="startTimer()"></button>
-        <button id="pause" class="btn-push" onclick="pauseTimer(true)"></button>
-        <button id="resume" class="btn-push" onclick="pauseTimer(event,false)"></button>
-        <button id="stop" class="btn-push" onclick="stopTimer()"></button>
-        <button id="next" class="btn-push" onclick="nextStep()"></button>
-        <button id="mute" onclick="mutebutton(event)"></button>
+        <button id="start" onclick="timer.startTimer()" title="Start Practice"></button>
+        <button id="pause" onclick="timer.pauseTimer()" title="Pause Practice"></button>
+        <button id="resume" onclick="timer.resumeTimer()" title="Resume Practice"></button>
+        <button id="stop" onclick="timer.stopTimer()" title="Stop Practice"></button>
+        <button id="mute" onclick="timer.toggleMute(event)" title="Mute Sound"></button>
+        <button id="next" onclick="timer.nextStep()" title="Skip to Next Step"></button>
     </div>
     <div class="main-content">
-        <p id="timer">Shambhavi</p>
+        <div id="timer">Shambhavi</div>
+        <p id="current-step">Ready to begin your practice</p>
     </div>
-    <script src="./nosleep.min.js"></script>
+
     <script>
-        let noSleep = new NoSleep();
-        let timer;
-        let mute = false;
-        let taskArray = [
+        const shambhaviTasks = [
             ['Start', 5],
-            ['Naadi Shuddhi', 240],
-            ['AUM Chanting', 110],
-            ['Shambhavi Kriya', 105],
-            ['Meditate', 420]
+            ['Prayer', 35],
+            ['Pathangaasana', 120],
+            ['Break', 5],
+            ['Shishupalasana-R', 120],
+            ['Break', 5],
+            ['Shishupalasana-L', 120],
+            ['Break', 5],
+            ['Nadi Vibhajan', 300],
+            ['Sukha Kriya', 360],
+            ['AUM Chanting', 360],
+            ['Vipareetha Shwasa', 180],
+            ['Bandas', 60],
+            ['Meditate', 360]
         ];
 
-        let i = 0;
-        let currentTaskTime = taskArray[i][1];
-        let pause = false;
-        let totalTime = 0;
-
-        let bell = new Audio("/assets/audio/bell.mp3");
-        let allAudio = [bell];
-
-        function preloadAudio() {
-            allAudio.forEach((audio) => {
-                audio.play();
-                audio.pause();
-                audio.currentTime = 0;
-            });
-        }
-        
-        function timerfunction() {
-            if (pause) {
-                return;
-            }
-
-            document.getElementById("timer").innerHTML = `${currentTaskTime} s <br>${taskArray[i][0]}`;
-            if (currentTaskTime == 0) {
-                i++;
-
-                if (!mute) {
-                    bell.play();
-                }
-
-                if (taskArray.length > i) {
-                    currentTaskTime = taskArray[i][1];
-                    return;
-                } else {
-                    stopTimer(event);
-                    return;
-                }
-            }
-            
-            if (!document.hasFocus() || (totalTime > 3300)){
-                stopTimer(event);
-                return;
-            }
-            totalTime++;
-            currentTaskTime--;
-            return;
-        }
-
-        function mutebutton(event) {
-            mute = !mute;
-            event.target.style.background = mute ? "url(/assets/images/icons/mute.png)" : "url(/assets/images/icons/unmute.png)";
-        }
-
-        function nextStep() {
-            currentTaskTime = 0;
-        }
-
-        function startTimer() {
-            preloadAudio();
-            document.querySelector(".container").classList.replace("stopTimer", "startTimer")
-            i = 0;
-            currentTaskTime = taskArray[i][1];
-            pause = false;
-            timer = setInterval(timerfunction, 1000);
-            noSleep.enable();
-        }
-
-        function stopTimer() {
-            clearInterval(timer);
-            noSleep.disable();
-            document.getElementById("timer").innerHTML = "completed";
-            document.querySelector(".container").classList.value = "container stopTimer";
-            return;
-        }
-
-        function pauseTimer(flag) {
-            pause = flag;
-            document.querySelector(".container").classList.toggle("pauseTimer", flag);
-        }
+        const timer = new YogaTimer(shambhaviTasks, "Shambhavi Mahamudra");
     </script>
 </body>
 </html>

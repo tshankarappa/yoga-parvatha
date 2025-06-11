@@ -1,105 +1,179 @@
+:root {
+    --primary-color: #4CAF50;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --button-size: 64px;
+    --button-spacing: 20px;
+    --icon-size: 24px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .container {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 35vh;
+    gap: var(--button-spacing);
+    min-height: 35vh;
     width: 100%;
+    background: linear-gradient(to bottom, #ffffff, var(--background-color));
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .main-content {
-    height: 65vh;
+    flex: 1;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 button {
-    background-color: #4CAF50;
+    width: var(--button-size);
+    height: var(--button-size);
     border: none;
-    color: white;
-    padding: 36px 36px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    margin: 4px 2px;
+    border-radius: 50%;
     cursor: pointer;
-    background: url(/assets/images/icons/play.jpg);
-    background-repeat: no-repeat !important;
-    background-size: 70px 70px !important;
-}
-
-#stop {
-    background: url(/assets/images/icons/stop.png);
-}
-
-#pause {
-    background: url(/assets/images/icons/pause.png);
-}
-
-#resume {
-    background: url(/assets/images/icons/resume.png);
-    display: none;
-}
-
-#mute {
-    background: url(/assets/images/icons/unmute.png);
-}
-
-#next {
-    background: url(/assets/images/icons/next.png);
-}
-
-.btn-push {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    top: 0px;
-    font-family: "Open Sans";
-    text-decoration: none;
-    font-size: 25px;
-    border-radius: 5px;
-    box-shadow: 0px 5px 0px #c4c4c4;
-    color: #222;
-    text-shadow: 1px 1px 1px #fff;
-    transition: All 250ms ease;
+    background-color: white !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide all buttons by default */
 }
 
-.btn-push:active {
-    position: relative;
-    top: 5px;
-    box-shadow: none !important;
-    transition: All 250ms ease;
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--icon-size);
+    height: var(--icon-size);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.btn-push-active {
-    box-shadow: none !important;
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#start::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+}
+
+#stop::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f44336'%3E%3Cpath d='M6 6h12v12H6z'/%3E%3C/svg%3E");
+}
+
+#pause::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232196F3'%3E%3Cpath d='M6 19h4V5H6v14zm8-14v14h4V5h-4z'/%3E%3C/svg%3E");
+}
+
+#resume::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232196F3'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+}
+
+#next::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff9800'%3E%3Cpath d='M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z'/%3E%3C/svg%3E");
+}
+
+#mute::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239e9e9e'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z'/%3E%3C/svg%3E");
+}
+
+#mute.muted::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239e9e9e'%3E%3Cpath d='M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z'/%3E%3C/svg%3E");
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 #timer {
-    font-size: 10vw;
-    color: black;
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 300;
+    color: var(--text-color);
     text-align: center;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
 }
 
-.startTimer #start {
-    display: none;
+#timer::after {
+    content: '';
+    display: block;
+    width: min(100px, 30vw);
+    height: 4px;
+    background: var(--primary-color);
+    margin: 20px auto;
+    border-radius: 2px;
 }
 
-.stopTimer #pause,
-.stopTimer #stop,
-.stopTimer #resume {
-    display: none;
+#current-step {
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    color: #666;
+    text-align: center;
+    margin: 10px 0;
+    font-weight: 500;
 }
 
-.pauseTimer #pause {
-    display: none;
+/* Timer States */
+.stopTimer #start,
+.stopTimer #mute {
+    display: block;
 }
 
-.pauseTimer #resume {
-    display: inline-block;
+.startTimer #pause,
+.startTimer #stop,
+.startTimer #next,
+.startTimer #mute {
+    display: block;
 }
 
-p {
-    font-size: 20px;
+.pauseTimer #resume,
+.pauseTimer #stop,
+.pauseTimer #next,
+.pauseTimer #mute {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --button-size: 56px;
+        --button-spacing: 15px;
+        --icon-size: 22px;
+    }
+
+    .container {
+        flex-wrap: wrap;
+        padding: 15px;
+        gap: 12px;
+    }
+
+    button {
+        margin: 4px;
+    }
 } 
