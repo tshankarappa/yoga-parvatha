@@ -10,23 +10,8 @@
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
+    <script src="debug.js"></script>
     <script src="timer.js"></script>
-    <style>
-        #debug {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            max-height: 100px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-    </style>
 </head>
 <body>
     <div class="container stopTimer">
@@ -41,19 +26,11 @@
         <div id="timer">Shanmukhi</div>
         <p id="current-step">Ready to begin your practice</p>
     </div>
-    <div id="debug"></div>
 
     <script>
-        // Debug function to show messages on screen
-        function debug(msg) {
-            const debugDiv = document.getElementById('debug');
-            const time = new Date().toLocaleTimeString();
-            debugDiv.innerHTML = `[${time}] ${msg}<br>` + debugDiv.innerHTML;
-        }
-
-        // Wait for DOM to be fully loaded
+        // Initialize timer after DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            debug('DOM loaded, initializing timer...');
+            window.debug('Initializing Shanmukhi timer...');
             
             const shanmukhiTasks = [
                 ['Start', 5],
@@ -63,21 +40,8 @@
                 ['Meditate', 420]
             ];
 
-            // Create timer instance
-            window.timer = new YogaTimer(shanmukhiTasks, "Shanmukhi", debug);
-            debug('Timer initialized');
-
-            // Add direct click handlers for testing
-            document.getElementById('start').addEventListener('click', function(e) {
-                debug('Start button clicked directly');
-                window.timer.startTimer();
-            });
-
-            document.getElementById('start').addEventListener('touchend', function(e) {
-                debug('Start button touched directly');
-                e.preventDefault();
-                window.timer.startTimer();
-            });
+            window.timer = new YogaTimer(shanmukhiTasks, "Shanmukhi", window.debug);
+            window.debug('Shanmukhi timer initialized');
         });
     </script>
 </body>

@@ -1,6 +1,6 @@
 class YogaTimer {
     constructor(taskArray, title, debugFn) {
-        this.debug = debugFn || function(msg) {};
+        this.debug = debugFn || function() {};
         this.debug('YogaTimer constructor called');
         
         this.noSleep = new NoSleep();

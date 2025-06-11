@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
     <title>Shambhavi Timer</title>
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
+    <script src="debug.js"></script>
     <script src="timer.js"></script>
 </head>
 <body>
     <div class="container stopTimer">
-        <button id="start" onclick="timer.startTimer()" title="Start Practice"></button>
-        <button id="pause" onclick="timer.pauseTimer()" title="Pause Practice"></button>
-        <button id="resume" onclick="timer.resumeTimer()" title="Resume Practice"></button>
-        <button id="stop" onclick="timer.stopTimer()" title="Stop Practice"></button>
-        <button id="mute" onclick="timer.toggleMute(event)" title="Mute Sound"></button>
-        <button id="next" onclick="timer.nextStep()" title="Skip to Next Step"></button>
+        <button id="start" title="Start Practice"></button>
+        <button id="pause" title="Pause Practice"></button>
+        <button id="resume" title="Resume Practice"></button>
+        <button id="stop" title="Stop Practice"></button>
+        <button id="mute" title="Mute Sound"></button>
+        <button id="next" title="Skip to Next Step"></button>
     </div>
     <div class="main-content">
         <div id="timer">Shambhavi</div>
@@ -25,7 +28,11 @@
     </div>
 
     <script>
-        const shambhaviTasks = [
+        // Initialize timer after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.debug('Initializing Shambhavi timer...');
+            
+            const shambhaviTasks = [
             ['Start', 5],
             ['Prayer', 35],
             ['Pathangaasana', 120],
@@ -40,9 +47,11 @@
             ['Vipareetha Shwasa', 180],
             ['Bandas', 60],
             ['Meditate', 360]
-        ];
+            ];
 
-        const timer = new YogaTimer(shambhaviTasks, "Shambhavi Mahamudra");
+            window.timer = new YogaTimer(shambhaviTasks, "Shambhavi", window.debug);
+            window.debug('Shambhavi timer initialized');
+        });
     </script>
 </body>
 </html>
