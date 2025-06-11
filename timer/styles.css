@@ -49,11 +49,12 @@ button {
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     background-color: white !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: none; /* Hide all buttons by default */
+    display: none;
+    transform: translateY(0);
 }
 
 button::before {
@@ -70,13 +71,14 @@ button::before {
 }
 
 button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
 button:active {
-    transform: translateY(1px);
+    transform: translateY(2px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #start::before {
@@ -176,5 +178,13 @@ button:active {
     button {
         margin: 4px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    button:hover {
+        transform: translateY(-3px);
+    }
+
+    button:active {
+        transform: translateY(1px);
     }
 } 
