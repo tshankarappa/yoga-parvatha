@@ -4,14 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <title>Shambhavi Timer</title>
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
-    <script src="debug.js"></script>
-    <script src="timer.js"></script>
+    <script type="module">
+        import { debug } from './debug.js';
+        import { YogaTimer } from './timer.js';
+
+        // Initialize timer after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            debug('Initializing Shambhavi timer...');
+            
+            const shambhaviTasks = [
+                ['Prayer', 5],
+                ['Pathangaasana', 5],
+                ['Surya Kriya', 5],
+                ['Angamardanam', 5],
+                ['Yogasanas', 5],
+                ['Bhuta Shuddhi', 5],
+                ['Surya Kriya', 5],
+                ['Shambhavi', 5],
+                ['Meditate', 5]
+            ];
+
+            const timer = new YogaTimer(shambhaviTasks, "Shambhavi", debug);
+            debug('Shambhavi timer initialized');
+        });
+    </script>
 </head>
 <body>
     <div class="container stopTimer">
@@ -26,32 +49,5 @@
         <div id="timer">Shambhavi</div>
         <p id="current-step">Ready to begin your practice</p>
     </div>
-
-    <script>
-        // Initialize timer after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            window.debug('Initializing Shambhavi timer...');
-            
-            const shambhaviTasks = [
-            ['Start', 5],
-            ['Prayer', 35],
-            ['Pathangaasana', 120],
-            ['Break', 5],
-            ['Shishupalasana-R', 120],
-            ['Break', 5],
-            ['Shishupalasana-L', 120],
-            ['Break', 5],
-            ['Nadi Vibhajan', 300],
-            ['Sukha Kriya', 360],
-            ['AUM Chanting', 360],
-            ['Vipareetha Shwasa', 180],
-            ['Bandas', 60],
-            ['Meditate', 360]
-            ];
-
-            window.timer = new YogaTimer(shambhaviTasks, "Shambhavi", window.debug);
-            window.debug('Shambhavi timer initialized');
-        });
-    </script>
 </body>
 </html>

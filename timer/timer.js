@@ -246,4 +246,7 @@ class YogaTimer {
         container.classList.remove("pauseTimer");
         container.classList.add("startTimer");
     }
-} 
+}
+
+// Export the YogaTimer class
+export { YogaTimer }; 

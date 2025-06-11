@@ -4,14 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <title>Shanmukhi Timer</title>
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
-    <script src="debug.js"></script>
-    <script src="timer.js"></script>
+    <script type="module">
+        import { debug } from './debug.js';
+        import { YogaTimer } from './timer.js';
+
+        // Initialize timer after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            debug('Initializing Shanmukhi timer...');
+            
+            const shanmukhiTasks = [
+                ['Start', 5],
+                ['Naadi Shuddhi', 240],
+                ['AUM Chanting', 110],
+                ['Shanmukhi Mudra', 105],
+                ['Meditate', 420]
+            ];
+
+            const timer = new YogaTimer(shanmukhiTasks, "Shanmukhi", debug);
+            debug('Shanmukhi timer initialized');
+        });
+    </script>
 </head>
 <body>
     <div class="container stopTimer">
@@ -26,23 +45,5 @@
         <div id="timer">Shanmukhi</div>
         <p id="current-step">Ready to begin your practice</p>
     </div>
-
-    <script>
-        // Initialize timer after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            window.debug('Initializing Shanmukhi timer...');
-            
-            const shanmukhiTasks = [
-                ['Start', 5],
-                ['Naadi Shuddhi', 240],
-                ['AUM Chanting', 110],
-                ['Shanmukhi Mudra', 105],
-                ['Meditate', 420]
-            ];
-
-            window.timer = new YogaTimer(shanmukhiTasks, "Shanmukhi", window.debug);
-            window.debug('Shanmukhi timer initialized');
-        });
-    </script>
 </body>
 </html>
