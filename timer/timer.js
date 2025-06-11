@@ -13,8 +13,12 @@ class YogaTimer {
         this.pause = false;
         this.totalTime = 0;
         this.lastUpdateTime = Date.now();
+        this.pauseStartTime = 0;
+        this.isPaused = false;
 
+        // Preload bell sound
         this.bell = new Audio("/assets/audio/bell.mp3");
+        this.bell.load();
         this.allAudio = [this.bell];
 
         // Initialize buttons with both click and touch events
@@ -72,9 +76,18 @@ class YogaTimer {
 
     preloadAudio() {
         this.allAudio.forEach((audio) => {
-            audio.play();
             audio.pause();
             audio.currentTime = 0;
+        });
+    }
+
+    playBell() {
+        if (this.mute) return;
+        
+        // Reset and play the preloaded bell sound
+        this.bell.currentTime = 0;
+        this.bell.play().catch(e => {
+            this.debug('Audio play failed: ' + e.message);
         });
     }
     
@@ -102,35 +115,22 @@ class YogaTimer {
             return;
         }
 
-        const now = Date.now();
-        const deltaTime = now - this.lastUpdateTime;
-        this.lastUpdateTime = now;
-
-        // If the time difference is too large (e.g., device was asleep),
-        // reset the timer to prevent large jumps
-        if (deltaTime > 2000) {
-            this.debug('Large time difference detected, stopping timer');
-            this.stopTimer();
-            return;
-        }
-
-        this.updateDisplay();
-
         if (this.currentTaskTime == 0) {
-            this.i++;
-
+            // Play bell before updating the step
             if (!this.mute) {
-                this.bell.play().catch(e => this.debug('Audio play failed: ' + e.message));
+                this.playBell();
             }
 
+            this.i++;
             if (this.taskArray.length > this.i) {
                 this.currentTaskTime = this.taskArray[this.i][1];
-                return;
             } else {
                 this.stopTimer();
                 return;
             }
         }
+        
+        this.updateDisplay();
         
         if (!document.hasFocus() || (this.totalTime > 3300)){
             this.debug('Document lost focus or time limit reached, stopping timer');
@@ -169,6 +169,7 @@ class YogaTimer {
         this.i = 0;
         this.currentTaskTime = this.taskArray[this.i][1];
         this.pause = false;
+        this.isPaused = false;
         this.totalTime = 0;
         this.lastUpdateTime = Date.now();
         
@@ -187,11 +188,16 @@ class YogaTimer {
     }
 
     stopTimer() {
-        clearInterval(this.timer);
+        this.debug('Stopping timer...');
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        
         try {
             this.noSleep.disable();
         } catch (e) {
-            console.log('NoSleep disable failed:', e);
+            this.debug('NoSleep disable failed: ' + e.message);
         }
         
         const container = document.querySelector(".container");
@@ -200,17 +206,42 @@ class YogaTimer {
         
         document.getElementById("timer").innerHTML = "Practice Complete";
         document.getElementById("current-step").innerHTML = "Thank you for your practice";
+        
+        this.pause = false;
+        this.isPaused = false;
     }
 
     pauseTimer() {
+        if (this.isPaused) return;
+        
+        this.debug('Pausing timer...');
         this.pause = true;
+        this.isPaused = true;
+        this.pauseStartTime = Date.now();
+        
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        
         const container = document.querySelector(".container");
         container.classList.remove("startTimer");
         container.classList.add("pauseTimer");
     }
 
     resumeTimer() {
+        if (!this.isPaused) return;
+        
+        this.debug('Resuming timer...');
         this.pause = false;
+        this.isPaused = false;
+        
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+        
+        this.timer = setInterval(() => this.timerfunction(), 1000);
+        
         const container = document.querySelector(".container");
         container.classList.remove("pauseTimer");
         container.classList.add("startTimer");
