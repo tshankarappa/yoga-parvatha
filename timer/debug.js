@@ -1,5 +1,5 @@
 // Debug module
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 function createDebugPanel() {
     const debugDiv = document.createElement('div');
