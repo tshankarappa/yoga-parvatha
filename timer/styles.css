@@ -174,15 +174,15 @@ button:active {
 
 @media (max-width: 768px) {
     :root {
-        --button-size: 64px;
-        --button-spacing: 15px;
-        --icon-size: 26px;
+        --button-size: 72px;
+        --button-spacing: 20px;
+        --icon-size: 32px;
     }
 
     .container {
         flex-wrap: wrap;
         padding: 15px;
-        gap: 12px;
+        gap: 16px;
     }
 
     button {
