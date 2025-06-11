@@ -14,12 +14,8 @@ class YogaTimer {
         this.bell = new Audio("/assets/audio/bell.mp3");
         this.allAudio = [this.bell];
 
-        // Prevent double-tap zoom on mobile, but allow button clicks
-        document.addEventListener('touchend', function(event) {
-            if (!event.target.closest('button')) {
-                event.preventDefault();
-            }
-        }, { passive: false });
+        // Initialize buttons with both click and touch events
+        this.initializeButtons();
 
         // Handle visibility change
         document.addEventListener('visibilitychange', () => {
@@ -30,6 +26,38 @@ class YogaTimer {
 
         // Initialize display
         this.updateDisplay();
+    }
+
+    initializeButtons() {
+        const buttons = {
+            'start': () => this.startTimer(),
+            'pause': () => this.pauseTimer(),
+            'resume': () => this.resumeTimer(),
+            'stop': () => this.stopTimer(),
+            'mute': (event) => this.toggleMute(event),
+            'next': () => this.nextStep()
+        };
+
+        Object.entries(buttons).forEach(([id, handler]) => {
+            const button = document.getElementById(id);
+            if (button) {
+                // Remove existing onclick attributes
+                button.removeAttribute('onclick');
+                
+                // Add both click and touch events
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log(`Button ${id} clicked`);
+                    handler(e);
+                });
+                
+                button.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    console.log(`Button ${id} touched`);
+                    handler(e);
+                });
+            }
+        });
     }
 
     preloadAudio() {
@@ -115,6 +143,7 @@ class YogaTimer {
     }
 
     startTimer() {
+        console.log('Starting timer...');
         this.preloadAudio();
         const container = document.querySelector(".container");
         container.classList.remove("stopTimer", "pauseTimer");
@@ -131,11 +160,16 @@ class YogaTimer {
         // Try to enable NoSleep
         try {
             this.noSleep.enable();
+            console.log('NoSleep enabled');
         } catch (e) {
             console.log('NoSleep enable failed:', e);
         }
         
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
         this.timer = setInterval(() => this.timerfunction(), 1000);
+        console.log('Timer interval set');
     }
 
     stopTimer() {
