@@ -18,6 +18,10 @@ function createDebugPanel() {
         overflow-y: auto;
         z-index: 9999;
         display: none;
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
     `;
     document.body.appendChild(debugDiv);
     return debugDiv;

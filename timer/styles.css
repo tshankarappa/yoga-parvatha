@@ -55,6 +55,8 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: none;
     transform: translateY(0);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 button::before {
@@ -79,6 +81,14 @@ button:active {
     transform: translateY(2px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add this new rule to reset the active state on touch devices */
+@media (hover: none) {
+    button:active {
+        transform: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 }
 
 #start::before {
