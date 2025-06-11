@@ -9,13 +9,16 @@ class YogaTimer {
         this.currentTaskTime = taskArray[this.i][1];
         this.pause = false;
         this.totalTime = 0;
+        this.lastUpdateTime = Date.now();
 
         this.bell = new Audio("/assets/audio/bell.mp3");
         this.allAudio = [this.bell];
 
-        // Prevent double-tap zoom on mobile
+        // Prevent double-tap zoom on mobile, but allow button clicks
         document.addEventListener('touchend', function(event) {
-            event.preventDefault();
+            if (!event.target.closest('button')) {
+                event.preventDefault();
+            }
         }, { passive: false });
 
         // Handle visibility change
@@ -61,13 +64,24 @@ class YogaTimer {
             return;
         }
 
+        const now = Date.now();
+        const deltaTime = now - this.lastUpdateTime;
+        this.lastUpdateTime = now;
+
+        // If the time difference is too large (e.g., device was asleep),
+        // reset the timer to prevent large jumps
+        if (deltaTime > 2000) {
+            this.stopTimer();
+            return;
+        }
+
         this.updateDisplay();
 
         if (this.currentTaskTime == 0) {
             this.i++;
 
             if (!this.mute) {
-                this.bell.play();
+                this.bell.play().catch(e => console.log('Audio play failed:', e));
             }
 
             if (this.taskArray.length > this.i) {
@@ -110,15 +124,27 @@ class YogaTimer {
         this.currentTaskTime = this.taskArray[this.i][1];
         this.pause = false;
         this.totalTime = 0;
+        this.lastUpdateTime = Date.now();
         
         this.updateDisplay();
+        
+        // Try to enable NoSleep
+        try {
+            this.noSleep.enable();
+        } catch (e) {
+            console.log('NoSleep enable failed:', e);
+        }
+        
         this.timer = setInterval(() => this.timerfunction(), 1000);
-        this.noSleep.enable();
     }
 
     stopTimer() {
         clearInterval(this.timer);
-        this.noSleep.disable();
+        try {
+            this.noSleep.disable();
+        } catch (e) {
+            console.log('NoSleep disable failed:', e);
+        }
         
         const container = document.querySelector(".container");
         container.classList.remove("startTimer", "pauseTimer");
