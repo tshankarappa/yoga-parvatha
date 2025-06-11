@@ -1,5 +1,8 @@
 class YogaTimer {
-    constructor(taskArray, title) {
+    constructor(taskArray, title, debugFn) {
+        this.debug = debugFn || function(msg) {};
+        this.debug('YogaTimer constructor called');
+        
         this.noSleep = new NoSleep();
         this.timer = null;
         this.mute = false;
@@ -26,9 +29,11 @@ class YogaTimer {
 
         // Initialize display
         this.updateDisplay();
+        this.debug('YogaTimer initialization complete');
     }
 
     initializeButtons() {
+        this.debug('Initializing buttons...');
         const buttons = {
             'start': () => this.startTimer(),
             'pause': () => this.pauseTimer(),
@@ -41,21 +46,26 @@ class YogaTimer {
         Object.entries(buttons).forEach(([id, handler]) => {
             const button = document.getElementById(id);
             if (button) {
+                this.debug(`Setting up button: ${id}`);
                 // Remove existing onclick attributes
                 button.removeAttribute('onclick');
                 
                 // Add both click and touch events
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    console.log(`Button ${id} clicked`);
+                    e.stopPropagation();
+                    this.debug(`Button ${id} clicked`);
                     handler(e);
-                });
+                }, { passive: false });
                 
                 button.addEventListener('touchend', (e) => {
                     e.preventDefault();
-                    console.log(`Button ${id} touched`);
+                    e.stopPropagation();
+                    this.debug(`Button ${id} touched`);
                     handler(e);
-                });
+                }, { passive: false });
+            } else {
+                this.debug(`Button not found: ${id}`);
             }
         });
     }
@@ -99,6 +109,7 @@ class YogaTimer {
         // If the time difference is too large (e.g., device was asleep),
         // reset the timer to prevent large jumps
         if (deltaTime > 2000) {
+            this.debug('Large time difference detected, stopping timer');
             this.stopTimer();
             return;
         }
@@ -109,7 +120,7 @@ class YogaTimer {
             this.i++;
 
             if (!this.mute) {
-                this.bell.play().catch(e => console.log('Audio play failed:', e));
+                this.bell.play().catch(e => this.debug('Audio play failed: ' + e.message));
             }
 
             if (this.taskArray.length > this.i) {
@@ -122,6 +133,7 @@ class YogaTimer {
         }
         
         if (!document.hasFocus() || (this.totalTime > 3300)){
+            this.debug('Document lost focus or time limit reached, stopping timer');
             this.stopTimer();
             return;
         }
@@ -143,7 +155,12 @@ class YogaTimer {
     }
 
     startTimer() {
-        console.log('Starting timer...');
+        this.debug('Starting timer...');
+        if (this.timer) {
+            this.debug('Clearing existing timer');
+            clearInterval(this.timer);
+        }
+
         this.preloadAudio();
         const container = document.querySelector(".container");
         container.classList.remove("stopTimer", "pauseTimer");
@@ -160,16 +177,13 @@ class YogaTimer {
         // Try to enable NoSleep
         try {
             this.noSleep.enable();
-            console.log('NoSleep enabled');
+            this.debug('NoSleep enabled');
         } catch (e) {
-            console.log('NoSleep enable failed:', e);
+            this.debug('NoSleep enable failed: ' + e.message);
         }
         
-        if (this.timer) {
-            clearInterval(this.timer);
-        }
         this.timer = setInterval(() => this.timerfunction(), 1000);
-        console.log('Timer interval set');
+        this.debug('Timer interval set');
     }
 
     stopTimer() {
