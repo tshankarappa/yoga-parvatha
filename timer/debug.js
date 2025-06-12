@@ -1,5 +1,6 @@
 // Debug module
-const DEBUG_MODE = false;
+const urlParams = new URLSearchParams(window.location.search);
+const DEBUG_MODE = urlParams.get('debug') === 'true';
 
 function createDebugPanel() {
     const debugDiv = document.createElement('div');
