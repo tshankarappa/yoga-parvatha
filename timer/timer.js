@@ -17,9 +17,8 @@ class YogaTimer {
         this.isPaused = false;
 
         // Initialize audio 
-        this.bell = new Audio("/assets/audio/bell.mp3");
-        this.bell.load();
-        this.allAudio = [this.bell];
+        let bell = new Audio("./bell.mp3");
+        let allAudio = [bell];
 
         // Initialize buttons with both click and touch events
         this.initializeButtons();
@@ -92,18 +91,16 @@ class YogaTimer {
     }
 
     preloadAudio() {
-        this.allAudio.forEach((audio) => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
+            this.allAudio.forEach((audio) => {
+                audio.play();
+                audio.pause();
+                audio.currentTime = 0;
+            });
     };
 
     playBell() {
         if (!this.mute) {
             this.debug('Playing bell sound');
-            // Reset the audio to start
-            this.bell.currentTime = 0;
-            // Play the sound
             this.bell.play().catch(e => {
                 this.debug('Error playing bell: ' + e.message);
             });
