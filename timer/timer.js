@@ -99,13 +99,15 @@ class YogaTimer {
     }
 
     playBell() {
-        if (this.mute) return;
-        
-        // Reset and play the preloaded bell sound
-        this.bell.currentTime = 0;
-        this.bell.play().catch(e => {
-            this.debug('Audio play failed: ' + e.message);
-        });
+        if (!this.mute) {
+            this.debug('Playing bell sound');
+            // Reset the audio to start
+            this.bell.currentTime = 0;
+            // Play the sound
+            this.bell.play().catch(e => {
+                this.debug('Error playing bell: ' + e.message);
+            });
+        }
     }
     
     formatTime(seconds) {
