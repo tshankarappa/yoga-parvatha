@@ -26,8 +26,23 @@ class YogaTimer {
 
         // Handle visibility change
         document.addEventListener('visibilitychange', () => {
+            this.debug('Visibility changed: ' + document.visibilityState);
+            
             if (document.hidden) {
-                this.debug('Page hidden, resetting timer state');
+                // Clear any existing timer
+                if (this.timer) {
+                    clearInterval(this.timer);
+                    this.timer = null;
+                }
+                
+                // Disable NoSleep
+                try {
+                    this.noSleep.disable();
+                } catch (e) {
+                    this.debug('NoSleep disable failed: ' + e.message);
+                }
+                
+                // Reset to initial state
                 this.stopTimer();
                 this.updateDisplay();
             }
