@@ -26,8 +26,10 @@ class YogaTimer {
 
         // Handle visibility change
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden && !this.pause) {
-                this.pauseTimer();
+            if (document.hidden) {
+                this.debug('Page hidden, resetting timer state');
+                this.stopTimer();
+                this.updateDisplay();
             }
         });
 
