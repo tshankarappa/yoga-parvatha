@@ -247,6 +247,9 @@ class YogaTimer {
             this.debug('NoSleep enable failed: ' + e.message);
         }
         
+        // Play initial bell sound
+        this.playBell();
+        
         this.timer = setInterval(() => this.timerfunction(), 1000);
         this.debug('Timer interval set');
     }
