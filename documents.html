@@ -146,11 +146,20 @@
 
     <script>
         function openPdf(pdfPath) {
-            const popup = document.getElementById('pdf-popup');
-            const frame = document.getElementById('pdf-frame');
-            frame.src = pdfPath;
-            popup.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            // Check if device is mobile
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // Open in new tab for mobile devices
+                window.open(pdfPath, '_blank');
+            } else {
+                // Use popup for desktop
+                const popup = document.getElementById('pdf-popup');
+                const frame = document.getElementById('pdf-frame');
+                frame.src = pdfPath;
+                popup.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         function closePdf() {
