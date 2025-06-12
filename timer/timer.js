@@ -16,10 +16,10 @@ class YogaTimer {
         this.pauseStartTime = 0;
         this.isPaused = false;
 
-        // Preload bell sound
-        this.bell = new Audio("/assets/audio/bell.mp3");
-        this.bell.load();
-        this.allAudio = [this.bell];
+        // Initialize audio context as null
+        this.audioContext = null;
+        this.bell = null;
+        this.allAudio = [];
 
         // Initialize buttons with both click and touch events
         this.initializeButtons();
@@ -53,42 +53,74 @@ class YogaTimer {
         this.debug('YogaTimer initialization complete');
     }
 
+    initializeAudio() {
+        this.debug('Initializing audio...');
+        // Create audio context
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.debug('Audio context created');
+        } catch (e) {
+            this.debug('Audio context creation failed: ' + e.message);
+        }
+
+        // Create and preload bell sound
+        this.bell = new Audio();
+        this.bell.src = "/assets/audio/bell.mp3";
+        this.bell.preload = "auto";
+        
+        // Add event listeners for audio loading
+        this.bell.addEventListener('canplaythrough', () => {
+            this.debug('Bell sound loaded and ready');
+        });
+        
+        this.bell.addEventListener('error', (e) => {
+            this.debug('Error loading bell sound: ' + e.message);
+        });
+
+        // Load the audio
+        this.bell.load();
+        this.allAudio = [this.bell];
+    }
+
     initializeButtons() {
         this.debug('Initializing buttons...');
-        const buttons = {
-            'start': () => this.startTimer(),
-            'pause': () => this.pauseTimer(),
-            'resume': () => this.resumeTimer(),
-            'stop': () => this.stopTimer(),
-            'mute': (event) => this.toggleMute(event),
-            'next': () => this.nextStep()
-        };
+        const startBtn = document.getElementById("start");
+        const pauseBtn = document.getElementById("pause");
+        const resumeBtn = document.getElementById("resume");
+        const stopBtn = document.getElementById("stop");
+        const muteBtn = document.getElementById("mute");
+        const nextBtn = document.getElementById("next");
 
-        Object.entries(buttons).forEach(([id, handler]) => {
-            const button = document.getElementById(id);
-            if (button) {
-                this.debug(`Setting up button: ${id}`);
-                // Remove existing onclick attributes
-                button.removeAttribute('onclick');
-                
-                // Add both click and touch events
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.debug(`Button ${id} clicked`);
-                    handler(e);
-                }, { passive: false });
-                
-                button.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.debug(`Button ${id} touched`);
-                    handler(e);
-                }, { passive: false });
-            } else {
-                this.debug(`Button not found: ${id}`);
+        // Initialize audio on start button click
+        startBtn.addEventListener("click", () => {
+            if (!this.audioContext) {
+                this.initializeAudio();
             }
+            this.startTimer();
         });
+        startBtn.addEventListener("touchstart", () => {
+            if (!this.audioContext) {
+                this.initializeAudio();
+            }
+            this.startTimer();
+        });
+
+        pauseBtn.addEventListener("click", () => this.pauseTimer());
+        pauseBtn.addEventListener("touchstart", () => this.pauseTimer());
+
+        resumeBtn.addEventListener("click", () => this.resumeTimer());
+        resumeBtn.addEventListener("touchstart", () => this.resumeTimer());
+
+        stopBtn.addEventListener("click", () => this.stopTimer());
+        stopBtn.addEventListener("touchstart", () => this.stopTimer());
+
+        muteBtn.addEventListener("click", () => this.toggleMute());
+        muteBtn.addEventListener("touchstart", () => this.toggleMute());
+
+        nextBtn.addEventListener("click", () => this.nextStep());
+        nextBtn.addEventListener("touchstart", () => this.nextStep());
+
+        this.debug('Buttons initialized');
     }
 
     preloadAudio() {
@@ -101,12 +133,25 @@ class YogaTimer {
     playBell() {
         if (!this.mute) {
             this.debug('Playing bell sound');
-            // Reset the audio to start
-            this.bell.currentTime = 0;
-            // Play the sound
-            this.bell.play().catch(e => {
-                this.debug('Error playing bell: ' + e.message);
-            });
+            try {
+                // Reset the audio to start
+                this.bell.currentTime = 0;
+                
+                // Resume audio context if suspended (needed for mobile)
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+                
+                // Play the sound
+                const playPromise = this.bell.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => {
+                        this.debug('Error playing bell: ' + e.message);
+                    });
+                }
+            } catch (e) {
+                this.debug('Error in playBell: ' + e.message);
+            }
         }
     }
     
@@ -160,9 +205,9 @@ class YogaTimer {
         this.currentTaskTime--;
     }
 
-    toggleMute(event) {
+    toggleMute() {
         this.mute = !this.mute;
-        const muteButton = event.target;
+        const muteButton = document.getElementById("mute");
         muteButton.classList.toggle('muted', this.mute);
         muteButton.title = this.mute ? "Unmute Sound" : "Mute Sound";
     }
