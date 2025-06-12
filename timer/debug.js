@@ -18,7 +18,7 @@ function createDebugPanel() {
         max-height: 200px;
         overflow-y: auto;
         z-index: 9999;
-        display: none;
+        display: ${DEBUG_MODE ? 'block' : 'none'};
         touch-action: none;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
