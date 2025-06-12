@@ -17,8 +17,9 @@ class YogaTimer {
         this.isPaused = false;
 
         // Initialize audio 
-        let bell = new Audio("./bell.mp3");
-        let allAudio = [bell];
+        this.bell = new Audio("/assets/audio/bell.mp3");
+        this.allAudio = [this.bell];
+
 
         // Initialize buttons with both click and touch events
         this.initializeButtons();
