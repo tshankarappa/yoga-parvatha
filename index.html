@@ -40,7 +40,7 @@
       padding: 0;
       align-items: center;
     }
-    .timer-button, .doc-button {
+    .timer-button {
       background-color: #007acc;
       color: white;
       border: none;
@@ -49,17 +49,17 @@
       cursor: pointer;
       font-size: 16px;
       transition: all 0.3s ease;
-      width: 90%;
+      width: 100%;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       text-decoration: none;
       display: inline-block;
     }
-    .timer-button:hover, .doc-button:hover {
+    .timer-button:hover {
       background-color: #005999;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-    .timer-button:active, .doc-button:active {
+    .timer-button:active {
       transform: translateY(0);
     }
     .section-title {
@@ -67,15 +67,27 @@
       color: #333;
       font-size: 20px;
     }
+    .hidden-link {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: transparent;
+      text-decoration: none;
+      font-size: 12px;
+      opacity: 0.1;
+      transition: opacity 0.3s ease;
+    }
+    .hidden-link:hover {
+      opacity: 0.3;
+    }
     @media (min-width: 768px) {
       .button-container {
         flex-direction: row;
         max-width: 600px;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 20px;
       }
-      .timer-button, .doc-button {
+      .timer-button {
         width: auto;
         min-width: 200px;
       }
@@ -92,9 +104,6 @@
     <a href="timer/shambhavi.html" class="timer-button">Shambhavi Timer</a>
   </div>
 
-  <h2 class="section-title">Documents</h2>
-  <div class="button-container">
-    <a href="documents.html" class="doc-button">View Practice Documents</a>
-  </div>
+  <a href="documents.html" class="hidden-link">📄</a>
 </body>
 </html>
