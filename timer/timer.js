@@ -50,6 +50,7 @@ class YogaTimer {
 
         // Initialize display
         this.updateDisplay();
+        this.initializeProgressBar();
         this.debug('YogaTimer initialization complete');
     }
 
@@ -114,17 +115,164 @@ class YogaTimer {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
+    initializeProgressBar() {
+        const container = document.querySelector(".container");
+        if (!container) {
+            this.debug('Container not found');
+            return;
+        }
+        
+        // Create progress container
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'progress-container collapsed hidden';
+        
+        // Create progress bar (outside collapsible content)
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressContainer.appendChild(progressBar);
+        
+        // Create header for collapsible section
+        const header = document.createElement('div');
+        header.className = 'progress-header';
+        header.innerHTML = `
+            <span>Session Progress</span>
+            <span class="toggle-icon">▶</span>
+        `;
+        header.addEventListener('click', () => {
+            progressContainer.classList.toggle('collapsed');
+            const icon = header.querySelector('.toggle-icon');
+            icon.textContent = progressContainer.classList.contains('collapsed') ? '▶' : '▼';
+        });
+        progressContainer.appendChild(header);
+        
+        // Create content wrapper
+        const content = document.createElement('div');
+        content.className = 'progress-content';
+        
+        // Create steps list
+        const stepsList = document.createElement('div');
+        stepsList.className = 'steps-list';
+        
+        // Add steps
+        this.taskArray.forEach((task, index) => {
+            const step = document.createElement('div');
+            step.className = 'step';
+            step.innerHTML = `
+                <div class="step-info">
+                    <span class="step-name">${task[0]}</span>
+                    <span class="step-time">${this.formatTime(task[1])}</span>
+                </div>
+                <div class="step-progress">
+                    <div class="step-progress-bar" data-total="${task[1]}" data-current="${task[1]}"></div>
+                </div>
+            `;
+            step.dataset.index = index;
+            stepsList.appendChild(step);
+        });
+        
+        content.appendChild(stepsList);
+        progressContainer.appendChild(content);
+        
+        // Insert after the current step
+        const currentStep = document.getElementById('current-step');
+        if (currentStep) {
+            currentStep.parentNode.insertBefore(progressContainer, currentStep.nextSibling);
+        } else {
+            container.appendChild(progressContainer);
+        }
+        
+    }
+
+    updateProgress() {
+        const progressBar = document.querySelector('.progress-bar');
+        const steps = document.querySelectorAll('.step');
+        const progressContainer = document.querySelector('.progress-container');
+        
+        if (!progressBar || !steps.length) return;
+        
+        // Hide progress container if session is complete
+        if (this.i >= this.taskArray.length) {
+            if (progressContainer) {
+                progressContainer.classList.add('hidden');
+            }
+            return;
+        }
+        
+        // Calculate total session time
+        const totalSessionTime = this.taskArray.reduce((total, task) => total + task[1], 0);
+        
+        // Calculate completed time
+        let completedTime = 0;
+        for (let j = 0; j < this.i; j++) {
+            completedTime += this.taskArray[j][1];
+        }
+        
+        // Add progress from current step
+        const currentStepTotal = this.taskArray[this.i][1];
+        const currentStepProgress = currentStepTotal - this.currentTaskTime;
+        completedTime += currentStepProgress;
+        
+        // Calculate percentage
+        const totalProgress = (completedTime / totalSessionTime) * 100;
+        progressBar.style.setProperty('--progress', `${totalProgress}%`);
+        
+        // Update steps
+        steps.forEach((step, index) => {
+            const stepProgressBar = step.querySelector('.step-progress-bar');
+            step.classList.remove('active', 'completed');
+            
+            if (index === this.i) {
+                step.classList.add('active');
+                // Update current step progress
+                const progress = (1 - (this.currentTaskTime / currentStepTotal)) * 100;
+                stepProgressBar.style.width = `${progress}%`;
+                stepProgressBar.style.background = '#4CAF50';
+            } else if (index < this.i) {
+                step.classList.add('completed');
+                stepProgressBar.style.width = '100%';
+                stepProgressBar.style.background = '#4CAF50';
+            } else {
+                stepProgressBar.style.width = '0%'; // Start at 0% for upcoming steps
+                stepProgressBar.style.background = '#e0e0e0';
+            }
+        });
+    }
+
     updateDisplay() {
+        this.debug('Updating display...');
         const timerElement = document.getElementById("timer");
         const stepElement = document.getElementById("current-step");
+        const progressContainer = document.querySelector('.progress-container');
+
+        if (!timerElement || !stepElement) {
+            this.debug('Required elements not found');
+            return;
+        }
+
+        // Show/hide progress container based on session state
+        if (progressContainer) {
+            if (this.i === 0 && !this.timer || this.i >= this.taskArray.length) {
+                progressContainer.classList.add('hidden');
+            } else {
+                progressContainer.classList.remove('hidden');
+            }
+        }
+
+        // Update progress
+        this.updateProgress();
 
         if (this.i === 0 && !this.timer) {
             timerElement.innerHTML = this.title;
             stepElement.innerHTML = "Ready to begin your practice";
+        } else if (this.i >= this.taskArray.length) {
+            timerElement.innerHTML = "00:00";
+            stepElement.innerHTML = "Session Complete";
         } else {
             timerElement.innerHTML = this.formatTime(this.currentTaskTime);
             stepElement.innerHTML = this.taskArray[this.i][0];
         }
+
+        this.debug('Display updated');
     }
 
     timerfunction() {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,30 +11,31 @@
     <title>Shambhavi Timer</title>
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/meditation.png">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="progress.css">
     <script src="https://cdn.jsdelivr.net/npm/nosleep.js@0.12.0/dist/NoSleep.min.js"></script>
     <script type="module">
         import { debug } from './debug.js';
         import { YogaTimer } from './timer.js';
 
         // Initialize timer after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             debug('Initializing Shambhavi timer...');
-            
+
             const shambhaviTasks = [
-            ['Start', 5],
-            ['Prayer', 35],
-            ['Pathangaasana', 120],
-            ['Break', 5],
-            ['Shishupalasana-R', 120],
-            ['Break', 5],
-            ['Shishupalasana-L', 120],
-            ['Break', 5],
-            ['Nadi Vibhajan', 300],
-            ['Sukha Kriya', 360],
-            ['AUM Chanting', 360],
-            ['Vipareetha Shwasa', 180],
-            ['Bandas', 60],
-            ['Meditate', 360]
+                ['Start', 5],
+                ['Prayer', 35],
+                ['Pathangaasana', 120],
+                ['Break', 5],
+                ['Shishupalasana-R', 120],
+                ['Break', 5],
+                ['Shishupalasana-L', 120],
+                ['Break', 5],
+                ['Nadi Vibhajan', 300],
+                ['Sukha Kriya', 360],
+                ['AUM Chanting', 360],
+                ['Vipareetha Shwasa', 180],
+                ['Bandas', 60],
+                ['Meditate', 360]
             ];
 
             const timer = new YogaTimer(shambhaviTasks, "Shambhavi", debug);
@@ -41,6 +43,7 @@
         });
     </script>
 </head>
+
 <body>
     <div class="container stopTimer">
         <button id="start" title="Start Practice"></button>
@@ -55,4 +58,5 @@
         <p id="current-step">Ready to begin your practice</p>
     </div>
 </body>
+
 </html>
