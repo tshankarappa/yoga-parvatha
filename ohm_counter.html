@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Om Counter</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    button { font-size: 20px; padding: 10px 20px; }
+    h1 { font-size: 48px; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Om Count: <span id="count">0</span></h1>
+  <button id="startBtn">Start Listening</button>
+
+  <script>
+    let recognizer;
+    let count = 0;
+    const countDisplay = document.getElementById("count");
+
+    async function start() {
+      recognizer = speechCommands.create("BROWSER_FFT");
+
+      // Load the model (pretrained)
+      await recognizer.ensureModelLoaded();
+
+      recognizer.listen(result => {
+        const scores = result.scores; // probability scores for all classes
+        const labels = recognizer.wordLabels();
+
+        // Find top result
+        const maxScoreIndex = scores.indexOf(Math.max(...scores));
+        const word = labels[maxScoreIndex];
+        const confidence = scores[maxScoreIndex];
+
+        console.log(`Detected: ${word} (${(confidence * 100).toFixed(1)}%)`);
+
+        // We can try mapping “Om” to "unknown" or "up" depending on how it sounds
+        if ((word === "up" || word === "unknown") && confidence > 0.80) {
+          count++;
+          countDisplay.textContent = count;
+        }
+      }, {
+        includeSpectrogram: false,
+        probabilityThreshold: 0.75,
+        overlapFactor: 0.5
+      });
+
+      document.getElementById("startBtn").disabled = true;
+    }
+
+    document.getElementById("startBtn").addEventListener("click", start);
+  </script>
+</body>
+</html>
